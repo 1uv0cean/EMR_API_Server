@@ -3,123 +3,32 @@ from flask_restx import Resource, Api, Namespace, fields
 import json
 from app.main import db
 
-person = Namespace(
-    name = "Visitor",
+visit = Namespace(
+    name = "Visit",
     description= "방문자 수에 대한 통계",
 )
 
-count_all= person.model('count_all',{
-     'person_count': fields.String(
-          description='전체 환자 수', 
+count_visitor= visit.model('count_all',{
+     'visit_count': fields.String(
+          description='전체 방문자 수', 
           required=True, 
           example='1234'
           )
 })
 
-count_gender= person.model('count_gender',{
-     'female_count': fields.String(
-          description='여성 환자 수', 
-          required=True, 
-          example='623'
-          ),
-     'male_count': fields.String(
-          description='남성 환자 수', 
-          required=True, 
-          example='600'
-          )
-})
-
-count_race= person.model('count_race',{
-     'white_count': fields.String(
-          description='백인 환자 수', 
-          required=True, 
-          example='423'
-          ),
-     'black_count': fields.String(
-          description='흑인 환자 수', 
-          required=True, 
-          example='400'
-          ),
-     'asian_count': fields.String(
-          description='아시아인 환자 수', 
-          required=True, 
-          example='400'
-          ),
-     'native_count': fields.String(
-          description='아메리카 원주민 환자 수', 
-          required=True, 
-          example='400'
-          )
-})
-
-count_death= person.model('count_death',{
-     'death_count': fields.String(
-          description='사망자 수', 
-          required=True, 
-          example='12'
-          )
-})
-
-table_person = db.Table('t_person', db.MetaData())
 def rep(data):
      data = data.replace("(","").replace(")","").replace(",","")
      return data
 
 
-@person.route("/count-all")
+@visit.route("/count-visitor")
 class personCount(Resource):
-     @person.expect(count_all)
+     @visit.expect(count_visitor)
      def get(self):
-          """전체 환자 수를 반환합니다"""
-          person_count = db.engine.execute('SELECT COUNT(*) FROM person')
-          row = person_count.first()
+          """전체 방문자 수를 반환합니다"""
+          visit_count = db.engine.execute('SELECT COUNT(*) FROM visit_occurrence')
+          row = visit_count.first()
           return {
-               "person_count":str(row[0])
+               "visit_count":str(row[0])
           }
 
-@person.route("/count-gender")
-class personCount(Resource):
-     @person.expect(count_gender)
-     def get(self):
-          """성별 환자 수를 반환합니다"""
-          female = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY gender_source_value = 'F';")
-          male = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY gender_source_value = 'M';")
-          frow = female.first()
-          mrow = male.first()
-          return {
-               "female_count": str(frow[0]),
-               "male_count": str(mrow[0])
-          }
-
-@person.route("/count-race")
-class personCount(Resource):
-     @person.expect(count_race)
-     def get(self):
-          """인종별 환자 수를 반환합니다"""
-          white = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY race_source_value = 'white';")
-          black = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY race_source_value = 'black';")
-          asian = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY race_source_value = 'asian';")
-          native = db.engine.execute("SELECT COUNT(*) FROM person GROUP BY race_source_value = 'native';")
-          
-          wrow = white.fetchall()  
-          brow = black.fetchall()
-          arow = asian.fetchall()
-          nrow = native.fetchall()
-          
-          return {
-               "white_count": rep(str(wrow[1])),
-               "black_count": rep(str(brow[1])),
-               "asian_count": rep(str(arow[1])),
-               "native_count": rep(str(nrow[1]))
-          }
-
-@person.route("/count-death")
-class personCount(Resource):
-     @person.expect(count_death)
-     def get(self):
-          """사망자 수를 반환합니다"""
-          death = db.engine.execute('SELECT COUNT(*) FROM death')
-          row = death.first()
-          return {
-               "death_count" : str(row[0])
-          }

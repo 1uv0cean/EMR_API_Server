@@ -1,6 +1,7 @@
 from flask_restx import Api
 from app.main import app
 from app.main.controllers.person import person
+from app.main.controllers.visit import visit
 
 api = Api(
     app,
@@ -12,3 +13,4 @@ api = Api(
 )
 
 api.add_namespace(person, '/person')
+api.add_namespace(visit, '/visit')

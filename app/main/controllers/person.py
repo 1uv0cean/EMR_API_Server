@@ -60,7 +60,6 @@ count_death= person.model('count_death',{
           )
 })
 
-table_person = db.Table('t_person', db.MetaData())
 def rep(data):
      data = data.replace("(","").replace(")","").replace(",","")
      return data
