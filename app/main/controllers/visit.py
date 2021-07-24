@@ -4,8 +4,8 @@ import json
 from app.main import db
 
 person = Namespace(
-    name = "Person",
-    description= "환자 수에 대한 통계",
+    name = "Visitor",
+    description= "방문자 수에 대한 통계",
 )
 
 count_all= person.model('count_all',{
