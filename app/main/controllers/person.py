@@ -39,7 +39,6 @@ class personCount(Resource):
           """전체 환자 수를 반환합니다"""
           person_count = db.engine.execute('SELECT COUNT(*) FROM person')
           row = person_count.first()
-          print(row)
           return {
                "person_count":str(row[0])
           }
