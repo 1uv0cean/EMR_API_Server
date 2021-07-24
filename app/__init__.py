@@ -1,5 +1,6 @@
 from flask_restx import Api
 from app.main import app
+from app.main.controllers.person import person
 
 api = Api(
     app,
@@ -9,3 +10,5 @@ api = Api(
     terms_url="/",
     contact="songhwee1@naver.com",
 )
+
+api.add_namespace(person, '/person')
