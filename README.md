@@ -17,5 +17,4 @@ main.cfg의 내용은 다음과 같습니다.
 #### 접속 방법
 
 * 실행 후, url 접속
-
-http://localhost:5000
+ http://localhost:5000
