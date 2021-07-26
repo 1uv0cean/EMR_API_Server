@@ -1,6 +1,5 @@
-## EMR_API_Server
+# EMR_API_Server
 Electronic Medical Record API Server
-----------------------------------------
 
 #### Requirements
 * python 3.6 이상
