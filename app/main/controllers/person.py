@@ -1,7 +1,7 @@
 from sqlalchemy import func
-from flask_restx import Resource, Api, Namespace, fields
-import json
+from flask_restx import Resource, Namespace, fields
 from app.main import db
+from app.main.models.cdm import t_person, t_death
 
 person = Namespace(
     name = "Person",
@@ -70,11 +70,18 @@ class personCount(Resource):
      @person.expect(count_all)
      def get(self):
           """전체 환자 수를 반환합니다"""
-          person_count = db.engine.execute('SELECT COUNT(*) FROM person')
-          row = person_count.first()
           return {
-               "person_count":str(row[0])
+               "person_count": db.session.query(t_person).count()
           }
+
+@person.route("/count-death")
+class personCount(Resource):
+     @person.expect(count_death)
+     def get(self):
+          """사망자 수를 반환합니다"""
+          return {
+               "death_count" : db.session.query(t_death).count()
+          }         
 
 @person.route("/count-gender")
 class personCount(Resource):
@@ -112,13 +119,3 @@ class personCount(Resource):
                "native_count": rep(str(nrow[1]))
           }
 
-@person.route("/count-death")
-class personCount(Resource):
-     @person.expect(count_death)
-     def get(self):
-          """사망자 수를 반환합니다"""
-          death = db.engine.execute('SELECT COUNT(*) FROM death')
-          row = death.first()
-          return {
-               "death_count" : str(row[0])
-          }
