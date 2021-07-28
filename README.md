@@ -7,7 +7,7 @@ Electronic Medical Record API Server
 
 #### 설치 방법
 
-main.default.cfg를 main.cfg로 복사 후, 파일을 직접 수정합니다.
+main_default.cfg를 main.cfg로 복사 후, 파일을 직접 수정합니다.
 
 main.cfg의 내용은 다음과 같습니다.
 
